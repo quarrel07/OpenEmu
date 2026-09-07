@@ -225,6 +225,7 @@
 		53439B6E13B932DB005C0CC8 /* PrefLibraryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53439B6D13B932DB005C0CC8 /* PrefLibraryController.swift */; };
 		53439B7113B932ED005C0CC8 /* PrefGameplayController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53439B7013B932ED005C0CC8 /* PrefGameplayController.swift */; };
 		556CEBF01BCE173B00F00EAA /* Graphics.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 556CEBEF1BCE173B00F00EAA /* Graphics.xcassets */; };
+		E4BDB92F13394E25967DD04C /* OpenEmu.icon in Resources */ = {isa = PBXBuildFile; fileRef = 08C7CF2ED661418886E7356F /* OpenEmu.icon */; };
 		55BE80432542A3DC00E3841E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55BE80422542A3DC00E3841E /* Images.xcassets */; };
 		55BE80B52542A51600E3841E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55BE80B42542A51600E3841E /* Images.xcassets */; };
 		55BE815F2542A54D00E3841E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55BE815E2542A54D00E3841E /* Images.xcassets */; };
@@ -1411,6 +1412,7 @@
 		53439B6D13B932DB005C0CC8 /* PrefLibraryController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrefLibraryController.swift; sourceTree = "<group>"; };
 		53439B7013B932ED005C0CC8 /* PrefGameplayController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrefGameplayController.swift; sourceTree = "<group>"; };
 		556CEBEF1BCE173B00F00EAA /* Graphics.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Graphics.xcassets; sourceTree = "<group>"; };
+		08C7CF2ED661418886E7356F /* OpenEmu.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = OpenEmu.icon; sourceTree = "<group>"; };
 		55BE80422542A3DC00E3841E /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		55BE80B42542A51600E3841E /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		55BE815E2542A54D00E3841E /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -2953,6 +2955,7 @@
 				C68A54E41516AD3C001053F2 /* OEDatabase.xcdatamodeld */,
 				1BEF34741168F8640090F72B /* PLists */,
 				556CEBEF1BCE173B00F00EAA /* Graphics.xcassets */,
+				08C7CF2ED661418886E7356F /* OpenEmu.icon */,
 				01E7214A2523E798002CA16F /* Other Assets */,
 				8F7F17BC24EE0A7A00D23C2D /* Localization */,
 				8F22764629D301FC001FB9F8 /* Config.xcconfig */,
@@ -5635,6 +5638,7 @@
 				83FE966419685F8F00DD8DB9 /* SetupAssistant.xib in Resources */,
 				83C748CC196DF34D0090BC91 /* HomebrewViewController.xib in Resources */,
 				556CEBF01BCE173B00F00EAA /* Graphics.xcassets in Resources */,
+				E4BDB92F13394E25967DD04C /* OpenEmu.icon in Resources */,
 				051DDCB923E5E50100325147 /* AvailableLibrariesCollectionViewItem.xib in Resources */,
 				8FD78305243A8AD300861B7A /* Debug.strings in Resources */,
 				832D29431451ACF200BDF950 /* MainWindow.xib in Resources */,
