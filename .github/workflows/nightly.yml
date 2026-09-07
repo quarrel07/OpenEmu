@@ -1,0 +1,76 @@
+name: Nightly arm64 build
+
+on:
+  schedule:
+    - cron: '0 10 * * *'
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: nightly
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build and publish
+    runs-on: macos-26
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Skip a scheduled run when the nightly already has this commit
+        id: check
+        run: |
+          published=$(gh release view nightly --json body -q .body 2>/dev/null | grep -o 'Commit: [0-9a-f]*' | awk '{print $2}' || true)
+          if [ "${{ github.event_name }}" = schedule ] && [ "$published" = "${{ github.sha }}" ]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "Nightly is already at ${{ github.sha }}; nothing to do."
+          fi
+
+      - name: Select Xcode 26
+        if: steps.check.outputs.skip != 'true'
+        run: |
+          xcode=$(ls -d /Applications/Xcode_26*.app | sort -V | tail -1)
+          sudo xcode-select -s "$xcode"
+          xcodebuild -version
+
+      - name: Build app and cores
+        if: steps.check.outputs.skip != 'true'
+        run: Scripts/build-arm64.sh --bundle-cores --zip
+
+      - name: Write release notes
+        if: steps.check.outputs.skip != 'true'
+        run: |
+          {
+            echo "Nightly arm64 build of OpenEmu from this fork's master branch."
+            echo
+            echo "Commit: ${{ github.sha }}"
+            echo "Built: $(date -u '+%Y-%m-%d %H:%M UTC')"
+            echo
+            echo "Two downloads:"
+            echo
+            echo "- OpenEmu-arm64.zip is the app, native arm64, with universal Mupen64Plus (N64), Mednafen (Virtual Boy, PlayStation, and more), and DeSmuME (Nintendo DS) cores bundled inside."
+            echo "- OpenEmu-Cores-universal.zip is the same three cores on their own. Copy them into ~/Library/Application Support/OpenEmu/Cores, replacing the Intel-only versions there. OpenEmu loads cores from that folder before the ones inside the app, so an Intel-only core left in place still wins."
+            echo
+            echo "First launch: the app is ad-hoc signed. Double-click the app, click Done on the warning, then open System Settings > Privacy & Security, scroll down to Security, and click Open Anyway. One-time thing per download. macOS also asks for Input Monitoring for the keyboard; grant it in Privacy & Security and relaunch."
+            echo
+            echo "Cores OpenEmu downloads on its own (NES, Game Boy, GBA, SNES, and others) ship unsigned and will not load natively until they are signed. From a checkout, Scripts/build-arm64.sh --sign-downloaded-cores does that in place."
+          } > build/dist/notes.md
+
+      - name: Publish the nightly release
+        if: steps.check.outputs.skip != 'true'
+        run: |
+          gh release delete nightly --cleanup-tag --yes || true
+          gh release create nightly \
+            --target "${{ github.sha }}" \
+            --prerelease \
+            --title "Nightly arm64 build ($(date -u +%Y-%m-%d))" \
+            --notes-file build/dist/notes.md \
+            build/dist/OpenEmu-arm64.zip \
+            build/dist/OpenEmu-Cores-universal.zip

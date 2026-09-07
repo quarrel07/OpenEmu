@@ -4,12 +4,17 @@
 # PlayStation, and others), DeSmuME (Nintendo DS).
 #
 # Usage:  Scripts/build-arm64.sh [--install-cores] [--sign-downloaded-cores]
+#                                [--bundle-cores] [--zip]
 #
 #   --install-cores          copy the universal cores into
 #                            ~/Library/Application Support/OpenEmu/Cores,
 #                            moving any existing copies to a dated backup
 #   --sign-downloaded-cores  ad-hoc sign the cores OpenEmu downloaded itself;
 #                            they ship unsigned, which native arm64 refuses
+#   --bundle-cores           copy the universal cores into the app bundle
+#                            (Contents/PlugIns/Cores) so a fresh install works
+#   --zip                    write build/dist/OpenEmu-arm64.zip and
+#                            build/dist/OpenEmu-Cores-universal.zip
 #
 # Environment overrides:
 #   APP_ARCHS   architectures for the app itself (default: arm64;
@@ -39,10 +44,14 @@ LOGS="$ROOT/build/logs"
 CORES=(Mupen64Plus Mednafen DeSmuME)
 INSTALL_CORES=no
 SIGN_DOWNLOADED=no
+BUNDLE_CORES=no
+MAKE_ZIP=no
 for arg in "$@"; do
   case "$arg" in
     --install-cores) INSTALL_CORES=yes ;;
     --sign-downloaded-cores) SIGN_DOWNLOADED=yes ;;
+    --bundle-cores) BUNDLE_CORES=yes ;;
+    --zip) MAKE_ZIP=yes ;;
     *) echo "unknown option: $arg" >&2; exit 2 ;;
   esac
 done
@@ -107,6 +116,32 @@ step "Stage app"
 rm -rf "$DIST/OpenEmu.app"; ditto "$DD_ARM/Build/Products/Release/OpenEmu.app" "$DIST/OpenEmu.app"
 codesign --force --deep -s "$SIGN" "$DIST/OpenEmu.app" 2>/dev/null
 printf '  OpenEmu.app: %s\n' "$(lipo -archs "$DIST/OpenEmu.app/Contents/MacOS/OpenEmu")"
+
+if [ "$BUNDLE_CORES" = yes ]; then
+  step "Bundle cores inside the app"
+  mkdir -p "$DIST/OpenEmu.app/Contents/PlugIns/Cores"
+  for core in "${CORES[@]}"; do
+    rm -rf "$DIST/OpenEmu.app/Contents/PlugIns/Cores/$core.oecoreplugin"
+    ditto "$DIST/Cores/$core.oecoreplugin" "$DIST/OpenEmu.app/Contents/PlugIns/Cores/$core.oecoreplugin"
+  done
+  codesign --force --deep -s "$SIGN" "$DIST/OpenEmu.app" 2>/dev/null
+  codesign --verify --deep --strict "$DIST/OpenEmu.app" && echo "  app re-signed with bundled cores"
+fi
+
+if [ "$MAKE_ZIP" = yes ]; then
+  step "Zip for download"
+  # --norsrc --noextattr --noqtn: plain ditto zips carry xattrs as AppleDouble
+  # entries that Archive Utility turns into stray ._ files inside the bundle,
+  # which breaks the code seal and makes Gatekeeper call the app damaged.
+  rm -f "$DIST/OpenEmu-arm64.zip" "$DIST/OpenEmu-Cores-universal.zip"
+  (cd "$DIST" && ditto -c -k --norsrc --noextattr --noqtn --keepParent OpenEmu.app OpenEmu-arm64.zip)
+  (cd "$DIST" && ditto -c -k --norsrc --noextattr --noqtn Cores OpenEmu-Cores-universal.zip)
+  for z in OpenEmu-arm64.zip OpenEmu-Cores-universal.zip; do
+    n=$(zipinfo -1 "$DIST/$z" | grep -c '/\._' || true)
+    [ "$n" = 0 ] || { echo "$z contains $n AppleDouble entries"; exit 1; }
+    printf '  %-28s %s\n' "$z" "$(du -h "$DIST/$z" | cut -f1)"
+  done
+fi
 
 APPCORES="$HOME/Library/Application Support/OpenEmu/Cores"
 if [ "$INSTALL_CORES" = yes ]; then
