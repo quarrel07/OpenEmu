@@ -15,10 +15,10 @@
 	url = ../../OpenEmu/GenesisPlus-Core.git
 [submodule "Mednafen"]
 	path = Mednafen
-	url = ../../OpenEmu/Mednafen-Core.git
+	url = ../../quarrel07/Mednafen-Core.git
 [submodule "Mupen64Plus"]
 	path = Mupen64Plus
-	url = ../../OpenEmu/Mupen64Plus-Core.git
+	url = ../../quarrel07/Mupen64Plus-Core.git
 [submodule "Nestopia"]
 	path = Nestopia
 	url = ../../OpenEmu/Nestopia-Core.git
@@ -84,7 +84,7 @@
 	url = ../../OpenEmu/JollyCV-Core.git
 [submodule "DeSmuME"]
 	path = DeSmuME
-	url = ../../OpenEmu/DeSmuME-Core.git
+	url = ../../quarrel07/DeSmuME-Core.git
 [submodule "picodrive"]
 	path = picodrive
 	url = ../../OpenEmu/picodrive.git
