@@ -45,3 +45,24 @@ Minimum Requirements
 macOS Mojave 10.14.4
 
 Building the default branch requires Xcode 14.3 and macOS Ventura.
+
+Native arm64 build (this fork)
+------------------------------
+
+This fork builds natively for arm64 on Xcode 26 and ships universal cores for
+Mupen64Plus (N64), Mednafen (Virtual Boy, PlayStation, and others), and
+DeSmuME (Nintendo DS). One script does the whole thing from a fresh clone:
+
+    Scripts/build-arm64.sh --install-cores --sign-downloaded-cores
+
+The app lands in `build/dist/OpenEmu.app` and the cores in `build/dist/Cores`.
+`--install-cores` copies the cores into `~/Library/Application Support/OpenEmu/Cores`
+after moving any existing copies to a dated backup folder next to it.
+`--sign-downloaded-cores` ad-hoc signs the cores OpenEmu downloaded itself
+(NES, Game Boy, GBA, SNES, and others); they ship unsigned, and native arm64
+refuses to load unsigned code.
+
+Two things to expect on first launch: macOS asks for Input Monitoring for the
+keyboard, and it asks again after every rebuild because ad-hoc signatures
+change with each build. Set `SIGN` to a signing identity to make the grant
+stick across builds.
