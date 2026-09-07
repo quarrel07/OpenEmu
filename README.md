@@ -3,6 +3,11 @@ OpenEmu
 
 ![alt text](http://openemu.org/img/intro-md.png "OpenEmu Screenshot")
 
+Nightly arm64 build (this fork)
+-------------------------------
+
+**[Download OpenEmu-arm64.zip](https://github.com/quarrel07/OpenEmu/releases/download/nightly/OpenEmu-arm64.zip)**, rebuilt from master on every push. Native arm64, with universal Mupen64Plus (N64), Mednafen (Virtual Boy, PlayStation, and more), and DeSmuME (Nintendo DS) cores bundled inside. First-launch steps and the core notes are on the [nightly release page](https://github.com/quarrel07/OpenEmu/releases/tag/nightly).
+
 OpenEmu is an open-source project whose purpose is to bring macOS game emulation into the realm of first-class citizenship. The project leverages modern macOS technologies, such as Cocoa, Metal, Core Animation, and other third-party libraries. One third-party library example is Sparkle, which is used for auto-updating. OpenEmu uses a modular architecture, allowing for game-engine plugins, allowing OpenEmu to support a host of different emulation engines and back ends while retaining the familiar macOS native front end.
 
 Currently, OpenEmu can load the following game engines as plugins:
