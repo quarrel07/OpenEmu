@@ -1181,7 +1181,7 @@ final class OEGameDocument: NSDocument {
                 gameViewController.showScreenShotNotification()
             }
         } catch {
-            NSLog("Could not save screenshot at URL: \(temporaryURL), with error: \(error)")
+            NSLog("%@", "Could not save screenshot at URL: \(temporaryURL), with error: \(error)")
         }
     }
     
@@ -1648,18 +1648,22 @@ final class OEGameDocument: NSDocument {
         
         gameCoreManager?.saveStateToFile(at: temporaryStateFileURL) { success, error in
             if !success {
-                NSLog("Could not create save state file at url: \(temporaryStateFileURL)")
+                NSLog("%@", "Could not create save state file at url: \(temporaryStateFileURL)")
                 
                 handler?()
                 return
             }
             
             var saveState: OEDBSaveState?
+            // Reuse the existing auto/quick save only if its bundle is still on disk
+            // and the new state file actually lands in it. A record whose bundle was
+            // deleted is dropped here and recreated below instead of crashing at quit.
             if stateName.hasPrefix(OEDBSaveState.specialNamePrefix),
-               let state = rom.saveState(withName: stateName) {
+               let state = rom.saveState(withName: stateName),
+               !state.deleteAndRemoveFilesIfInvalid(),
+               state.replaceStateFileWithFile(at: temporaryStateFileURL) {
                 state.coreIdentifier = core.bundleIdentifier
                 state.coreVersion = core.version
-                state.replaceStateFileWithFile(at: temporaryStateFileURL)
                 state.timestamp = Date()
                 saveState = state
             } else {
@@ -1668,7 +1672,7 @@ final class OEGameDocument: NSDocument {
             }
             
             guard let state = saveState else {
-                NSLog("Could not create save state item for \(stateName)")
+                NSLog("%@", "Could not create save state item for \(stateName)")
                 
                 handler?()
                 return
@@ -1692,7 +1696,7 @@ final class OEGameDocument: NSDocument {
                     do {
                         try convertedData?.write(to: state.screenshotURL, options: .atomic)
                     } catch {
-                        NSLog("Could not create screenshot at url: \(state.screenshotURL) with error: \(error)")
+                        NSLog("%@", "Could not create screenshot at url: \(state.screenshotURL) with error: \(error)")
                     }
                     handler?()
                 }

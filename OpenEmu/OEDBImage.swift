@@ -50,7 +50,7 @@ final class OEDBImage: OEDBItem {
     class func prepareImage(with url: URL) -> [String : Any]? {
         guard let image = NSImage(contentsOf: url)
         else {
-            NSLog("File at \(url.absoluteString) is not a valid image.")
+            NSLog("%@", "File at \(url.absoluteString) is not a valid image.")
             return nil
         }
         

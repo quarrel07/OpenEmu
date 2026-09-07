@@ -147,7 +147,7 @@ extension OELibraryDatabase {
         
         images.forEach { $0.delete() }
         try? context.save()
-        NSLog("Deleted \(images.count) images!")
+        NSLog("%@", "Deleted \(images.count) images!")
     }
     
     func removeArtworkWithRemoteBacking() {
@@ -178,7 +178,7 @@ extension OELibraryDatabase {
         }
         
         try? context.save()
-        NSLog("Deleted \(count) image files!")
+        NSLog("%@", "Deleted \(count) image files!")
     }
     
     func syncGamesWithoutArtwork() {
@@ -197,7 +197,7 @@ extension OELibraryDatabase {
         }
         
         games.forEach { $0.requestInfoSync() }
-        NSLog("Found \(games.count) games")
+        NSLog("%@", "Found \(games.count) games")
     }
     
     func downloadMissingArtwork() {
@@ -246,7 +246,7 @@ extension OELibraryDatabase {
         }
         
         try? context.save()
-        NSLog("Downloaded \(count) image files!")
+        NSLog("%@", "Downloaded \(count) image files!")
     }
     
     func removeUntrackedImageFiles() {
@@ -282,7 +282,7 @@ extension OELibraryDatabase {
             try? FileManager.default.removeItem(at: untrackedFile)
         }
         
-        NSLog("Removed \(artwork.count) unknown files from artwork directory")
+        NSLog("%@", "Removed \(artwork.count) unknown files from artwork directory")
     }
     
     func cleanupHashes() {
@@ -325,7 +325,7 @@ extension OELibraryDatabase {
         }
         
         try? context.save()
-        NSLog("\(romsToDelete.count) roms deleted")
+        NSLog("%@", "\(romsToDelete.count) roms deleted")
     }
     
     func cancelCoverArtSync() {
@@ -345,7 +345,7 @@ extension OELibraryDatabase {
         
         games.forEach { $0.status = .ok }
         try? context.save()
-        NSLog("Cancelled cover art download for \(games.count) games")
+        NSLog("%@", "Cancelled cover art download for \(games.count) games")
     }
     
     func sanityCheck() {
@@ -366,7 +366,7 @@ extension OELibraryDatabase {
         }
         
         if counts.0 != 0 {
-            NSLog("Found \(counts.0) roms without game!")
+            NSLog("%@", "Found \(counts.0) roms without game!")
         }
         
         // Look for roms referencing the same file
@@ -388,7 +388,7 @@ extension OELibraryDatabase {
             lastRom = rom
         }
         if counts.0 != 0 {
-            NSLog("Found \(counts.0) duplicated roms!")
+            NSLog("%@", "Found \(counts.0) duplicated roms!")
         }
         
         // Look for roms with same hash
@@ -414,10 +414,10 @@ extension OELibraryDatabase {
             lastRom = rom
         }
         if counts.0 != 0 {
-            NSLog("Found \(counts.0) duplicated roms!")
+            NSLog("%@", "Found \(counts.0) duplicated roms!")
         }
         if counts.1 != 0 {
-            NSLog("Found \(counts.1) roms with wrong case in hash!")
+            NSLog("%@", "Found \(counts.1) roms with wrong case in hash!")
         }
         
         // Look for games without roms
@@ -431,7 +431,7 @@ extension OELibraryDatabase {
         }
         
         if counts.0 != 0 {
-            NSLog("Found \(counts.0) games without rom!")
+            NSLog("%@", "Found \(counts.0) games without rom!")
         }
         
         
@@ -448,10 +448,10 @@ extension OELibraryDatabase {
             }
         }
         if counts.0 != 0 {
-            NSLog("Found \(counts.0) save states without rom!")
+            NSLog("%@", "Found \(counts.0) save states without rom!")
         }
         if counts.1 != 0 {
-            NSLog("Found \(counts.1) invalid save states!")
+            NSLog("%@", "Found \(counts.1) invalid save states!")
         }
         
         
@@ -464,7 +464,7 @@ extension OELibraryDatabase {
             }
         }
         if counts.0 != 0 {
-            NSLog("Found \(counts.0) images without game!")
+            NSLog("%@", "Found \(counts.0) images without game!")
         }
         
         // Look for images without source
@@ -479,10 +479,10 @@ extension OELibraryDatabase {
             }
         }
         if counts.0 != 0 {
-            NSLog("Found \(counts.0) images without local path!")
+            NSLog("%@", "Found \(counts.0) images without local path!")
         }
         if counts.1 != 0 {
-            NSLog("Found \(counts.1) invalid images!")
+            NSLog("%@", "Found \(counts.1) invalid images!")
         }
         
         NSLog("= Done =")
