@@ -72,7 +72,7 @@
 	url = ../../OpenEmu/BSNES-Core.git
 [submodule "OpenEmuKit"]
 	path = OpenEmuKit
-	url = ../../OpenEmu/OpenEmuKit.git
+	url = ../../quarrel07/OpenEmuKit.git
 [submodule "XADMaster"]
 	path = Vendor/XADMaster
 	url = https://github.com/MacPaw/XADMaster
